@@ -1,0 +1,76 @@
+# This workflow will do a clean installation of node dependencies,
+# cache/restore them, compile the source code, run tests and then generate and publish badges
+
+name: Test Branch Man CI
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      DISPLAY: 1
+      SHELL: /usr/bin/bash
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js v${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      # ### For Local testing
+      # - name: Install Linux dependencies
+      #   run: |
+      #     sudo add-apt-repository universe
+      #     sudo apt-get update
+      #     sudo apt-get install -y libatk1.0-0 libgtk-3-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxrandr2 libxdamage1 libpango-1.0-0 libnss3 libxshmfence1 libgbm-dev libasound2
+
+      - name: Set Linux environment variables
+        run: |
+          export PATH "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket"
+          export PATH "DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket"
+          export DISPLAY=99.0
+
+      - name: Setup headless display
+        uses: pyvista/setup-headless-display-action@v3
+
+      - name: Prepare tests
+        run: npm run pretest
+
+      - name: Run tests (headless)
+        run: npm run test:coverage
+
+      - name: Move coverage summary
+        run: npm run move-coverage
+
+      - name: Create Badges
+        run: npm run make-badges
+
+      - name: Deploy badges
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./badges

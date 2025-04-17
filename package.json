@@ -1,0 +1,71 @@
+{
+  "name": "branchman",
+  "displayName": "Branch Man",
+  "description": "A branch manager for Git",
+  "version": "0.0.10",
+  "icon": "./assets/branch_man_icon.png",
+  "author": {
+    "name": "T Motsoeneng",
+    "url": "https://github.com/themegat"
+  },
+  "publisher": "Mega-T",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "branchman.update-child",
+        "title": "Update Child Branch",
+        "category": "Branch Man"
+      },
+      {
+        "command": "branchman.set-branch-state",
+        "title": "Set Branch State",
+        "category": "Branch Man"
+      },
+      {
+        "command": "branchman.show-branch-state",
+        "title": "Show Branch State",
+        "category": "Branch Man"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "package": "mkdir -p package && vsce package && mv *.vsix ./package/",
+    "test:coverage": "vscode-test --label 0 --coverage --coverage-reporter json-summary --coverage-output coverage/coverage-summary",
+    "npm run ": "mv ./coverage/coverage-summary/coverage-summary.json ./coverage/ && rm -rf ./coverage/coverage-summary",
+    "make-badge:coverage": "node ./scripts/createCoverageBadge.js coverage/coverage-summary.json ./badges/",
+    "make-badge:version": "node ./scripts/createVersionBadge.js package.json ./badges/",
+    "make-badges": "npm run make-badge:version && npm run make-badge:coverage"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/sinon": "^17.0.4",
+    "@types/vscode": "^1.99.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.3.2",
+    "eslint": "^9.23.0",
+    "mocha": "^11.1.0",
+    "sinon": "^20.0.0",
+    "svg2img": "^1.0.0-beta.2",
+    "typescript": "^5.8.2"
+  }
+}
