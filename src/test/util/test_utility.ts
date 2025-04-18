@@ -8,12 +8,21 @@ export class TestUtility {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  public static checkoutBranch(
+  public static async checkoutBranch(
     workspaceName: string,
     branchName: string
   ): Promise<string> {
-    const dir = process.cwd();
-    const workspace = path.join(dir, "..", "..", "src", "test", "env", workspaceName);
+    const { findUp } = await import("find-up");
+
+    const packageJsonPath = await findUp("package.json");
+
+    if (!packageJsonPath) {
+      throw new Error("package.json not found!");
+    }
+
+    const rootDir = path.dirname(packageJsonPath);
+
+    const workspace = path.join(rootDir, "src", "test", "env", workspaceName);
     return new Promise((resolve, reject) => {
       const command = `cd ${workspace} && git checkout ${branchName}`;
       exec(command, (error, stdout, stderr) => {
