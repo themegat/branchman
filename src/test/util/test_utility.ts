@@ -27,9 +27,21 @@ export class TestUtility {
 
     // const rootDir = path.dirname(packageJsonPath);
 
-    const workspace = path.join(__dirname, "..", "..", "..", "src", "test", "env", workspaceName);
     return new Promise((resolve, reject) => {
-      const command = `cd ${workspace} && git checkout ${branchName}`;
+      const workspace = path.join(
+        __dirname,
+        "..",
+        "..",
+        "..",
+        "src",
+        "test",
+        "env",
+        workspaceName
+      );
+
+      process.chdir(workspace);
+
+      const command = ` git checkout ${branchName}`;
       exec(command, (error, stdout, stderr) => {
         if (error) {
           reject(`Error: ${error.message}`);

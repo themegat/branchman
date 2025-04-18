@@ -46,7 +46,10 @@ jobs:
         run: npm run pretest
 
       - name: Run tests (headless)
-        run: npm run test:coverage
+        run: |
+          ls -la
+          ls -l ./src/test/env || echo "Directory ./src/test/env does not exist"
+          npm run test:coverage
 
       - name: Move coverage summary
         run: npm run move-coverage
