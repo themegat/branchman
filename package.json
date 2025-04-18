@@ -48,7 +48,7 @@
     "test": "vscode-test",
     "test:setup-env": "bash ./src/test/env/setup.sh",
     "test:coverage": "vscode-test --label 0 --coverage --coverage-reporter json-summary --coverage-output coverage/coverage-summary",
-    "npm run ": "mv ./coverage/coverage-summary/coverage-summary.json ./coverage/ && rm -rf ./coverage/coverage-summary",
+    "move-coverage": "mv ./coverage/coverage-summary/coverage-summary.json ./coverage/ && rm -rf ./coverage/coverage-summary",
     "make-badge:coverage": "node ./scripts/createCoverageBadge.js coverage/coverage-summary.json ./badges/",
     "make-badge:version": "node ./scripts/createVersionBadge.js package.json ./badges/",
     "make-badges": "npm run make-badge:version && npm run make-badge:coverage",
