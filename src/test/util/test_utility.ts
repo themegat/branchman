@@ -1,4 +1,5 @@
 import { exec } from "child_process";
+import { console } from "inspector";
 import path from "path";
 
 export class TestUtility {
@@ -21,8 +22,10 @@ export class TestUtility {
     }
 
     const rootDir = path.dirname(packageJsonPath);
+    const githubWorkDir = process.cwd();
+    console.log("githubWorkDir", githubWorkDir);
 
-    const workspace = path.join(rootDir, "src", "test", "env", workspaceName);
+    const workspace = path.join(githubWorkDir, "src", "test", "env", workspaceName);
     return new Promise((resolve, reject) => {
       const command = `cd ${workspace} && git checkout ${branchName}`;
       exec(command, (error, stdout, stderr) => {
