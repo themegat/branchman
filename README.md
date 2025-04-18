@@ -1,4 +1,6 @@
 # Branch Man
+![version](https://github.com/themegat/branchman/raw/gh-pages/version_badge.png)
+![coverage](https://github.com/themegat/branchman/raw/gh-pages/coverage_badge.png)
 
 Branch Man is a branch manager for Git that works on a single/multi-folder workspace.
 
