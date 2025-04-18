@@ -13,19 +13,21 @@ export class TestUtility {
     workspaceName: string,
     branchName: string
   ): Promise<string> {
-    const { findUp } = await import("find-up");
+    // const { findUp } = await import("find-up");
 
-    const packageJsonPath = await findUp("package.json");
+    // const packageJsonPath = await findUp("package.json");
 
-    if (!packageJsonPath) {
-      throw new Error("package.json not found!");
-    }
-
-    const rootDir = path.dirname(packageJsonPath);
     const githubWorkDir = process.cwd();
     console.log("githubWorkDir", githubWorkDir);
+    console.log("workDir", __dirname);
 
-    const workspace = path.join(githubWorkDir, "src", "test", "env", workspaceName);
+    // if (!packageJsonPath) {
+    //   throw new Error("package.json not found!");
+    // }
+
+    // const rootDir = path.dirname(packageJsonPath);
+
+    const workspace = path.join(__dirname, "..", "..", "..", "src", "test", "env", workspaceName);
     return new Promise((resolve, reject) => {
       const command = `cd ${workspace} && git checkout ${branchName}`;
       exec(command, (error, stdout, stderr) => {
