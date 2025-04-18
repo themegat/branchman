@@ -66,7 +66,7 @@ jobs:
           git branch
 
       - name: Prepare tests
-        run: npm run pretes
+        run: npm run pretest
       
       - name: Run tests (headless)
         run: npm run test:coverage
