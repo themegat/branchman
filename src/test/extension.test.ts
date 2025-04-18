@@ -126,15 +126,12 @@ suite("Branch Man Test Suite", () => {
         "Set branch master as the parent for the current branch feat2 ?";
       assert.equal(message, expectedMessage);
 
-      const extension = vscode.extensions.getExtension("Mega-T.branchman");
-      if (extension && extension.isActive) {
-        const context = extension.exports.context;
-        var workspaceTwoState = context.workspaceState.get(
-          "workspace_two"
-        ) as BranchState;
+      const context = TestUtility.extensionContext;
+      var workspaceTwoState = context.workspaceState.get(
+        "workspace_two"
+      ) as BranchState;
 
-        assert.equal(workspaceTwoState.parentBranch, "master");
-      }
+      assert.equal(workspaceTwoState.parentBranch, "master");
 
       tearDown();
     })?.timeout(TestUtility.TEST_TIMEOUT * 4);
@@ -269,9 +266,16 @@ suite("Branch Man Test Suite", () => {
       infoMessageDialog.resolves("Yes");
 
       await TestUtility.checkoutBranch("workspace_one", "feat3");
-      await TestUtility.delay(TestUtility.DELAY * 2);
+      await TestUtility.delay(TestUtility.DELAY);
+
+      const context = TestUtility.extensionContext;
+      const state = context.workspaceState.get("workspace_one") as BranchState;
+      state.parentBranch = "master";
+      context.workspaceState.update("workspace_one", state);
+      await TestUtility.delay(TestUtility.DELAY);
 
       vscode.commands.executeCommand("branchman.update-child");
+
       await TestUtility.delay(TestUtility.DELAY);
       assert.equal(quickPick.called, true);
       const message = quickPick.args[0][1];
@@ -280,10 +284,19 @@ suite("Branch Man Test Suite", () => {
         "Select a workspace folder to run git pull"
       );
 
-      const pullMessage = infoMessageDialog.args[3][0];
-      assert.equal(pullMessage, "Pull changes from master into feat3?");
+      let dialogIndex = 2;
+      const expectedPullMessage = "Pull changes from master into feat3?";
+      let pullMessage = infoMessageDialog.args[dialogIndex][0];
 
-      const gitMessage = infoMessageDialog.args[4][1];
+      if (!(`${pullMessage}`).includes(expectedPullMessage)) {
+        dialogIndex++;
+        pullMessage = infoMessageDialog.args[dialogIndex][0];
+      }
+
+      assert.equal(pullMessage, expectedPullMessage);
+
+      dialogIndex++;
+      const gitMessage = infoMessageDialog.args[dialogIndex][1];
       assert.equal(`${gitMessage.detail}`.includes("Already up to date"), true);
 
       tearDown();

@@ -1,6 +1,6 @@
 import { exec } from "child_process";
-import { console } from "inspector";
 import path from "path";
+import * as vscode from "vscode";
 
 export class TestUtility {
   static readonly TEST_TIMEOUT = 4000;
@@ -13,20 +13,6 @@ export class TestUtility {
     workspaceName: string,
     branchName: string
   ): Promise<string> {
-    // const { findUp } = await import("find-up");
-
-    // const packageJsonPath = await findUp("package.json");
-
-    const githubWorkDir = process.cwd();
-    console.log("githubWorkDir", githubWorkDir);
-    console.log("workDir", __dirname);
-
-    // if (!packageJsonPath) {
-    //   throw new Error("package.json not found!");
-    // }
-
-    // const rootDir = path.dirname(packageJsonPath);
-
     return new Promise((resolve, reject) => {
       const workspace = path.join(
         __dirname,
@@ -52,5 +38,15 @@ export class TestUtility {
         }
       });
     });
+  }
+
+  public static get extensionContext(): vscode.ExtensionContext {
+    const extension = vscode.extensions.getExtension("Mega-T.branchman");
+    if (extension && extension.isActive) {
+      const context = extension.exports.context;
+      return context;
+    } else {
+      throw new Error("Extension is not active");
+    }
   }
 }
