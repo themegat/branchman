@@ -42,14 +42,34 @@ jobs:
       - name: Setup headless display
         uses: pyvista/setup-headless-display-action@v3
 
-      - name: Prepare tests
-        run: npm run pretest
-
-      - name: Run tests (headless)
+      - name: Create Test Directories
         run: |
+          cd ./src/test/env
+          git clone https://github.com/w3schools-test/hello-world.git workspace_one
+          git clone https://github.com/w3schools-test/hello-world.git workspace_two
           ls -la
-          ls -l ./src/test/env || echo "Directory ./src/test/env does not exist"
-          npm run test:coverage
+
+      - name: Create Workspace One Branches
+        run: |
+          cd ./src/test/env/workspace_one
+          git checkout -b feat1
+          git checkout -b feat3
+          git checkout -b feat4
+          git checkout master
+          git branch
+      
+      - name: Create Workspace Two Branches
+        run: |
+          cd ./src/test/env/workspace_two
+          git checkout -b feat2
+          git checkout master
+          git branch
+
+      - name: Prepare tests
+        run: npm run pretes
+      
+      - name: Run tests (headless)
+        run: npm run test:coverage
 
       - name: Move coverage summary
         run: npm run move-coverage
