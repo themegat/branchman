@@ -51,8 +51,8 @@ jobs:
 
       # Comment out the following step when running locally
       
-      # - name: Create Test Workspaces
-      #   run: npm run test:setup-env
+      - name: Create Test Workspaces
+        run: npm run test:setup-env
 
       - name: Prepare tests
         run: npm run pretest
