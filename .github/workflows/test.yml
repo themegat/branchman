@@ -20,13 +20,11 @@ jobs:
         shell: bash
 
     env:
-      DISPLAY: 1
-      SHELL: /usr/bin/bash
+      DISPLAY: ":99.0"
 
     strategy:
       matrix:
         node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
       - name: Checkout Repository
@@ -40,19 +38,6 @@ jobs:
 
       - name: Install Node.js dependencies
         run: npm ci
-
-      # ### For Local testing
-      # - name: Install Linux dependencies
-      #   run: |
-      #     sudo add-apt-repository universe
-      #     sudo apt-get update
-      #     sudo apt-get install -y libatk1.0-0 libgtk-3-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxrandr2 libxdamage1 libpango-1.0-0 libnss3 libxshmfence1 libgbm-dev libasound2
-
-      - name: Set Linux environment variables
-        run: |
-          export PATH "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket"
-          export PATH "DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket"
-          export DISPLAY=99.0
 
       - name: Setup headless display
         uses: pyvista/setup-headless-display-action@v3

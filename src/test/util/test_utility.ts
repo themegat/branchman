@@ -10,7 +10,7 @@ export class TestUtility {
     }
     public static runBashScript(scriptPath: string, scriptName: string, args?: string[]): Promise<string> {
         return new Promise((resolve, reject) => {
-            const command = `bash ${scriptName} ${args?.join(" ")}`;
+            const command = `/bin/bash ${scriptName} ${args?.join(" ")}`;
             exec(command, { cwd: scriptPath }, (error, stdout, stderr) => {
                 if (error) {
                     reject(`Error: ${error.message}`);
