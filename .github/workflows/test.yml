@@ -30,6 +30,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      ## For testing the workflow locally,
+      ## you can uncomment the following lines to copy node_modules 
+      ## and vscode from a Docker image
+      ## and comment out the Set up Node.js and Install Node.js dependencies steps.
+
+      # - name: Copy node_modules and vscode from Docker image
+      #   run: |
+      #     cp -r /app/.vscode-test ./.vscode-test
+      #     cp -r /app/node_modules ./node_modules
+
       - name: Set up Node.js v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -42,12 +52,14 @@ jobs:
       - name: Setup headless display
         uses: pyvista/setup-headless-display-action@v3
 
+      # Comment out the following step when running locally
+      
       - name: Create Test Workspaces
         run: npm run test:setup-env
 
       - name: Prepare tests
         run: npm run pretest
-      
+
       - name: Run tests (headless)
         run: npm run test:coverage
 
@@ -56,6 +68,8 @@ jobs:
 
       - name: Create Badges
         run: npm run make-badges
+
+      # Comment out the following step when running locally
 
       - name: Deploy badges
         uses: peaceiris/actions-gh-pages@v3
