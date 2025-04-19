@@ -53,7 +53,8 @@
     "make-badge:version": "node ./scripts/createVersionBadge.js package.json ./badges/",
     "make-badges": "npm run make-badge:version && npm run make-badge:coverage",
     "docker:build-test": "docker build -f .docker/test/dockerfile --pull=false -t act-test-ubuntu-node .",
-    "act:test": "act --pull=false --workflows \".github/workflows/test.yml\" --secret-file \"\" --var-file \"\" --input-file \"\" --eventpath \"\""
+    "act:test": "act --pull=false --workflows \".github/workflows/test.yml\" --secret-file \"\" --var-file \"\" --input-file \"\" --eventpath \"\"",
+    "vscode:download": "node ./scripts/vscode_downloader.js"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",

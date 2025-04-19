@@ -1,1 +1,2 @@
 -P ubuntu-latest=act-test-ubuntu-node
+--pull=false

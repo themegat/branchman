@@ -68,8 +68,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
+COPY ./scripts/vscode_downloader.js ./scripts/
 
 # Install dependencies
 RUN npm ci
 
-ENV PATH="/app/node_modules/.bin:$PATH"
+# Download VS Code for testing
+RUN npm run vscode:download
